@@ -50,6 +50,8 @@ Please see the [Wiki](https://github.com/johanmeijer/grott/wiki) for further inf
 
 ## What's new
 ### New in Version 2.6.x  (2.6 Branch)
+#### TL3-X 3 phase inverter support 
+see issue #81/#82/#85: add invtype=tl3 in grott.ini [Generic] section (or use ginvtype="tl3" environmental variable e.g. for docker ledidome/grott:2.6.1f)
 #### SPF off grid inverter support 
 see issue #42/#46: add invtype=spf in grott.ini [Generic] section (or use ginvtype=spf environmental variable e.g. for docker)
 #### SPH hybrid (grid/battery) support 
