@@ -143,6 +143,28 @@ def procdata(conf,data):
     if conf.compat is False: 
         # new method if compat = False (automatic detection):  
        
+        if (conf.invtype == "default") :
+            # Handle systems with mixed invtype
+            if (ndata > 25) :
+                # There is enough data for a data logger serial number
+                inverterType = "default"
+
+                dataLoggerSerial = result_string[16:36]
+                dataLoggerSerial = codecs.decode(dataLoggerSerial, "hex").decode('utf-8')
+                if conf.verbose:
+                    print("\t - Possible Data logger serial", dataLoggerSerial)
+
+                # Lookup inverter type based on data logger serial
+                try:
+                    inverterType = conf.invtypemap[dataLoggerSerial]
+                    print("\t - Matched data logger to inverter type", inverterType)
+                except:
+                    inverterType = "default"
+                    print("\t - Data logger not recognised - using inverter type", inverterType)
+
+                if (inverterType != "default") :
+                    layout = layout + inverterType.upper()
+
         if conf.verbose: 
            print("\t - " + 'Growatt new layout processing')
            print("\t\t - " + "decrypt       : ",conf.decrypt)
@@ -632,4 +654,4 @@ def procdata(conf,data):
             ##print("\t -", ext_result)
     else: 
             if conf.verbose : print("\t - " + "Grott extension processing disabled ")      
-            
+
