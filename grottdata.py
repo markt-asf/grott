@@ -145,22 +145,22 @@ def procdata(conf,data):
        
         if (conf.invtype == "default") :
             # Handle systems with mixed invtype
-            if (ndata > 25) :
-                # There is enough data for a data logger serial number
+            if (ndata > 50) :
+                # There is enough data for an inverter serial number
                 inverterType = "default"
 
-                dataLoggerSerial = result_string[16:36]
-                dataLoggerSerial = codecs.decode(dataLoggerSerial, "hex").decode('utf-8')
+                inverterSerial = result_string[76:96]
+                inverterSerial = codecs.decode(inverterSerial, "hex").decode('utf-8')
                 if conf.verbose:
-                    print("\t - Possible Data logger serial", dataLoggerSerial)
+                    print("\t - Possible Inverter serial", inverterSerial)
 
-                # Lookup inverter type based on data logger serial
+                # Lookup inverter type based on inverter serial
                 try:
-                    inverterType = conf.invtypemap[dataLoggerSerial]
-                    print("\t - Matched data logger to inverter type", inverterType)
+                    inverterType = conf.invtypemap[inverterSerial]
+                    print("\t - Matched inverter serial to inverter type", inverterType)
                 except:
                     inverterType = "default"
-                    print("\t - Data logger not recognised - using inverter type", inverterType)
+                    print("\t - Inverter serial not recognised - using inverter type", inverterType)
 
                 if (inverterType != "default") :
                     layout = layout + inverterType.upper()
