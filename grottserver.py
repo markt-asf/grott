@@ -671,7 +671,11 @@ class GrottHttpRequestHandler(http.server.BaseHTTPRequestHandler):
                 qname = loggerreg[dataloggerid]["ip"] + "_" + str(loggerreg[dataloggerid]["port"])
                 self.send_queuereg[qname].put(body)
                 responseno = "{:04x}".format(sendseq)
-                regkey = "{:04x}".format(int(register))
+                if sendcommand == "10":
+                    regkey = "{:04x}".format(int(startregister)) + "{:04x}".format(int(endregister))
+                else :
+                    regkey = "{:04x}".format(int(register))
+
                 try: 
                     #delete response: be aware a 18 command give 19 response, 06 send command gives 06 response in differnt format! 
                     if sendcommand == "18" :
@@ -1014,6 +1018,18 @@ class sendrecvserver:
                 else : 
                     #command 05 or 19 
                     commandresponse[command][regkey] = {"value" : value} 
+
+                response = None
+
+            elif header[14:16] in ("10") :
+                if verbose: print("\t - Grottserver - " + header[12:16] + " record received, no response needed")
+
+                startregister = int(result_string[76:80],16)
+                endregister = int(result_string[80:84],16)
+                value = result_string[84:86]
+                
+                regkey = "{:04x}".format(startregister) + "{:04x}".format(endregister)
+                commandresponse[command][regkey] = {"value" : value} 
 
                 response = None
 
